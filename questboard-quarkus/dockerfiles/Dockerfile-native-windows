@@ -1,0 +1,18 @@
+FROM bellsoft/hardened-liberica-native-image-kit-container:jdk-25-nik-25-musl AS builder
+WORKDIR /app
+
+COPY --chmod=755 mvnw ./
+COPY .mvn .mvn
+COPY pom.xml ./
+COPY src src
+
+# A workaround for a weird bug causing Windows checkout to convert the Quarkus wrapper to CRLF
+# No such problem on macOS, no such problem with Spring wrapper
+
+RUN sed -i 's/\r$//' mvnw && ./mvnw -Pnative package && cp target/native/quarkus-runner /app/app
+
+FROM bellsoft/hardened-base:nonroot-musl
+WORKDIR /app
+COPY --from=builder /app/app .
+EXPOSE 8080
+ENTRYPOINT ["/app/app"]

@@ -1,12 +1,11 @@
 FROM bellsoft/hardened-liberica-native-image-kit-container:jdk-25-nik-25-musl AS builder
 WORKDIR /app
 COPY . /app/quarkus
-RUN cd quarkus \
-    && ./mvnw -Pnative package
+RUN cd quarkus && ./mvnw -Pnative package && cp target/native/quarkus-runner /app/app
 
 
 FROM bellsoft/hardened-base:nonroot-musl
 WORKDIR /app
-COPY --from=builder /app/quarkus/target/native/quarkus /app/app
+COPY --from=builder /app/app .
 EXPOSE 8080
 ENTRYPOINT ["/app/app"]

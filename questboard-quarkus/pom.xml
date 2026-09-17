@@ -149,9 +149,9 @@
                 <quarkus.package.jar.enabled>false</quarkus.package.jar.enabled>
                 <skipITs>false</skipITs>
                 <quarkus.native.enabled>true</quarkus.native.enabled>
+                <quarkus.native.additional-build-args>-Os</quarkus.native.additional-build-args>
                 <quarkus.package.output-directory>native</quarkus.package.output-directory>
                 <quarkus.package.output-name>quarkus</quarkus.package.output-name>
-                <quarkus.package.runner-suffix></quarkus.package.runner-suffix>
             </properties>
         </profile>
     </profiles>

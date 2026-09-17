@@ -131,6 +131,9 @@
                             <imageName>spring</imageName>
                             <outputDirectory>target/native</outputDirectory>
                             <mainClass>dev.cyberjar.QuestboardSpringApplication</mainClass>
+                            <buildArgs>
+                                <buildArg>-Os</buildArg>
+                            </buildArgs>
                         </configuration>
                     </plugin>
                     <plugin>
