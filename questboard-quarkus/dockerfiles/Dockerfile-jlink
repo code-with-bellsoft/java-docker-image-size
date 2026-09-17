@@ -1,0 +1,55 @@
+FROM bellsoft/hardened-liberica-runtime-container:jdk-all-25-musl AS builder
+
+WORKDIR /app
+
+COPY pom.xml mvnw ./
+COPY .mvn .mvn
+COPY src src
+
+RUN --mount=type=cache,target=/root/.m2 \
+    ./mvnw clean package
+
+# EXTRA_MODULES is for modules needed only dynamically
+# and therefore invisible to static jdeps analysis.
+ARG EXTRA_MODULES=""
+
+RUN set -eu; \
+    CP=""; \
+    for jar in $(find target/quarkus-app -type f -name '*.jar'); do \
+        if [ -z "$CP" ]; then \
+            CP="$jar"; \
+        else \
+            CP="$CP:$jar"; \
+        fi; \
+    done; \
+    APP_JAR="$(find target/quarkus-app/app -type f -name '*.jar' | head -n 1)"; \
+    echo "Application JAR: $APP_JAR"; \
+    MODULES="$(jdeps \
+        --ignore-missing-deps \
+        --multi-release 25 \
+        --print-module-deps \
+        --class-path "$CP" \
+        "$APP_JAR")"; \
+    if [ -n "$EXTRA_MODULES" ]; then \
+        MODULES="$MODULES,$EXTRA_MODULES"; \
+    fi; \
+    echo "JDK modules: $MODULES"; \
+    jlink \
+        --add-modules "$MODULES" \
+        --compress=2 \
+        --strip-debug \
+        --no-header-files \
+        --no-man-pages \
+        --output /jlink-runtime
+
+
+FROM bellsoft/hardened-base:nonroot-musl
+
+WORKDIR /app
+
+COPY --from=builder /jlink-runtime /jlink-runtime
+COPY --from=builder /app/target/quarkus-app /app/quarkus-app
+
+EXPOSE 8080
+
+ENTRYPOINT ["/jlink-runtime/bin/java", "-jar", "/app/quarkus-app/quarkus-run.jar"]

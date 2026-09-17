@@ -1,0 +1,16 @@
+FROM bellsoft/hardened-liberica-runtime-container:jdk-25-musl
+
+WORKDIR /app
+
+COPY pom.xml mvnw ./
+COPY .mvn .mvn
+COPY src src
+
+RUN --mount=type=cache,target=/root/.m2 \
+    ./mvnw clean package \
+    && mv target/quarkus-app /app/quarkus-app \
+    && rm -rf src target .mvn mvnw pom.xml
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/app/quarkus-app/quarkus-run.jar"]

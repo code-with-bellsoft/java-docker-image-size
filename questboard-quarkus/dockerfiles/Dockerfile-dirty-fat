@@ -1,0 +1,12 @@
+FROM bellsoft/hardened-liberica-runtime-container:jdk-25-musl
+
+WORKDIR /app
+
+COPY . /app/quarkus
+
+RUN cd /app/quarkus \
+    && ./mvnw clean package
+
+EXPOSE 8080
+
+ENTRYPOINT ["java","-jar", "/app/quarkus/target/quarkus-app/quarkus-run.jar"]

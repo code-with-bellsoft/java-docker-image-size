@@ -1,0 +1,68 @@
+## Spring
+
+### Get all quests
+GET http://localhost:8080/quests
+
+### Get quest by id
+GET http://localhost:8080/quests/1
+
+### Get quests by difficulty
+GET http://localhost:8080/quests?difficulty=HARD
+
+### Get quests by required class
+
+GET http://localhost:8080/quests?requiredClass=Wizard
+
+### Get quests by difficulty and required class
+
+GET http://localhost:8080/quests?difficulty=HARD&requiredClass=Wizard
+
+
+### Create quest
+POST http://localhost:8080/quests
+Content-Type: application/json
+
+{
+  "title": "Investigate suspicious memory leak",
+  "difficulty": "HARD",
+  "reward": 700,
+  "requiredClass": "Wizard"
+}
+
+
+### Update quest
+PUT http://localhost:8080/quests/1
+Content-Type: application/json
+
+{
+  "title": "Clear suspiciously intelligent rats from the tavern cellar",
+  "difficulty": "MEDIUM",
+  "reward": 120,
+  "requiredClass": "Any"
+}
+
+### Assign quest
+POST http://localhost:8080/quests/3/assign
+Content-Type: application/json
+
+{
+  "heroName": "Aria",
+  "heroClass": "Wizard"
+}
+
+### Delete quest
+DELETE http://localhost:8080/quests/1
+
+### Spring Boot Actuator health
+GET http://localhost:8080/actuator/health
+
+### Spring Boot Actuator DB health
+GET http://localhost:8080/actuator/health/db
+
+## Quarkus
+
+### Quarkus health
+GET http://localhost:8080/q/health
+
+### Quarkus readiness
+GET http://localhost:8080/q/health/ready

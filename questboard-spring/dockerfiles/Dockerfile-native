@@ -1,0 +1,9 @@
+FROM bellsoft/hardened-liberica-native-image-kit-container:jdk-25-nik-25-musl as builder
+WORKDIR /app
+COPY . /app/spring
+RUN cd spring && ./mvnw -Pnative native:compile
+
+FROM bellsoft/hardened-base:nonroot-musl
+WORKDIR /app
+COPY --from=builder /app/spring/target/native/spring /app/app
+ENTRYPOINT ["/app/app"]

@@ -1,0 +1,20 @@
+FROM bellsoft/hardened-liberica-runtime-container:jdk-25-musl AS builder
+
+WORKDIR /app
+
+COPY pom.xml mvnw ./
+COPY .mvn .mvn
+COPY src src
+
+RUN --mount=type=cache,target=/root/.m2 \
+    ./mvnw clean package
+
+
+# an intermediate step that extracts the layers from the JAR file should be here
+# (recommended by Spring)
+# For simplicity sake, we just use an executable JAR. The final image size is the same.
+
+FROM bellsoft/hardened-liberica-runtime-container:jre-25-nonroot-musl
+WORKDIR /app
+COPY --from=builder /app/target/*-spring-boot.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
