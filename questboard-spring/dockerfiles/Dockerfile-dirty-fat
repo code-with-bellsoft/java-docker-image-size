@@ -1,4 +1,4 @@
-FROM bellsoft/hardened-liberica-runtime-container:jdk-25-musl as builder
+FROM eclipse-temurin:25-jdk
 WORKDIR /app COPY . /app/spring
 RUN cd /app/spring \
     && ./mvnw clean package \

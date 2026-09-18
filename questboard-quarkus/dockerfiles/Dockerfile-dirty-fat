@@ -1,4 +1,4 @@
-FROM bellsoft/hardened-liberica-runtime-container:jdk-25-musl
+FROM eclipse-temurin:25-jdk
 
 WORKDIR /app
 
