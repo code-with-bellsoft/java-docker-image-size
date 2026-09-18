@@ -1,5 +1,6 @@
 FROM eclipse-temurin:25-jdk
-WORKDIR /app COPY . /app/spring
+WORKDIR /app
+COPY . /app/spring
 RUN cd /app/spring \
     && ./mvnw clean package \
     && cp target/*-spring-boot.jar /app/app.jar

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/questboard-spring/src/main/resources/db/migration/V1__create_quests_table.sql" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/questboard-spring/src/main/resources/db/migration/V2__insert_initial_quests.sql" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/questboard-spring/src/main/resources/db/migration/V3__add_quest_assignment.sql" dialect="GenericSQL" />
-  </component>
-</project>
